@@ -57,10 +57,15 @@ export const LoginPage = () => {
                 // 🔑 FLUJO DE INICIO DE SESIÓN
                 const { data } = await api.post<LoginResponse>("/auth/login", { email, password });
                 
-                if (data.success) {
-                    login(data); 
-                    navigate("/", { replace: true }); 
-                }
+if (data.success) {
+    login(data);
+    const rol = data.usuario.rol;
+    if (rol === "admin") {
+        navigate("/admin/dashboard", { replace: true }); // 👑 Admin → Dashboard
+    } else {
+        navigate("/", { replace: true }); // 🛒 Cliente → Tienda
+    }
+}
             }
         } catch (err: any) {
             console.error(err);

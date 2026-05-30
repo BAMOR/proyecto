@@ -1,11 +1,13 @@
-// src/router/ProtectedRoute.tsx
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-export const ProtectedRoute = () => {
-    const { isAuthenticated, loading } = useAuth();
+interface Props {
+    allowedRoles?: string[]; // 👈 opcional, si no se pasa = cualquier usuario autenticado
+}
 
-    // ⏳ Si el contexto está cargando o verificando el token en localStorage...
+export const ProtectedRoute = ({ allowedRoles }: Props) => {
+    const { isAuthenticated, loading, user } = useAuth();
+
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -14,11 +16,14 @@ export const ProtectedRoute = () => {
         );
     }
 
-    // 🛡️ Si NO está autenticado, lo expulsa cambiando la URL del navegador a /login
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
     }
 
-    // 🔓 Si está autenticado, renderiza el MainLayout y sus rutas hijas
+    // Si hay roles requeridos y el usuario no los tiene → lo manda a su home
+    if (allowedRoles && !allowedRoles.includes(user!.rol)) {
+        return <Navigate to="/" replace />;
+    }
+
     return <Outlet />;
 };

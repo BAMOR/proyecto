@@ -5,38 +5,33 @@ import { HomePage } from "../pages/HomePage";
 import { CartPage } from "../pages/CartPage";
 import { LoginPage } from "../pages/LoginPage";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { DashboardPage } from "../pages/DashboardPage";
 
 export const AppRouter = createBrowserRouter([
-    // 1. 🔓 Ruta raíz limpia: Si entran a /, se evalúa el Guardián directamente
+    // Rutas de clientes (las que ya tienes)
     {
         path: "/",
-        element: <ProtectedRoute />, // 🛡️ El guardián decide si se quedan o se van
+        element: <ProtectedRoute />,
         children: [
             {
                 element: <MainLayout />,
                 children: [
-                    { 
-                        index: true, 
-                        element: <HomePage /> // 🔐 http://localhost:5173/ si está logueado
-                    },
-                    { 
-                        path: "cart", 
-                        element: <CartPage /> // 🔐 http://localhost:5173/cart
-                    }
+                    { index: true, element: <HomePage /> },
+                    { path: "cart", element: <CartPage /> }
                 ]
             }
         ]
     },
 
-    // 2. 🔓 Ruta pública del Login
+    // 👑 Ruta del Admin (separada, sin MainLayout de tienda)
     {
-        path: "/login",
-        element: <LoginPage /> // 👈 Al estar al mismo nivel que la raíz, el navegador limpia la URL
+        path: "/admin",
+        element: <ProtectedRoute allowedRoles={["admin"]} />, // 🛡️ Solo admins
+        children: [
+            { path: "dashboard", element: <DashboardPage /> }
+        ]
     },
 
-    // 3. 🔄 Comodín de seguridad total
-    {
-        path: "*",
-        element: <Navigate to="/login" replace />
-    }
+    { path: "/login", element: <LoginPage /> },
+    { path: "*", element: <Navigate to="/login" replace /> }
 ]);
