@@ -2,136 +2,83 @@ const express = require('express')
 const router = express.Router()
 const db = require('../config/db')
 
+// GET buscar productos
 router.get('/api/productos/buscar', (req, res) => {
-    const { q } = req.query;
-    
+    const { q } = req.query
     if (!q || q.trim() === '') {
-        return res.status(400).json({ 
-            success: false,
-            error: 'Término de búsqueda requerido' 
-        });
+        return res.status(400).json({ success: false, error: 'Término de búsqueda requerido' })
     }
-    
-
     const sql = `
-        SELECT 
-            id,
-            categoria_id,
-            nombre,
-            descripcion,
-            precio,
-            stock,
-            sku,
-            estado,
-            imagen_url
+        SELECT id, categoria_id, nombre, descripcion, precio, stock, sku, estado, imagen_url
         FROM productos
-        WHERE nombre LIKE ? 
-           OR descripcion LIKE ? 
-           OR sku LIKE ?
+        WHERE nombre LIKE ? OR descripcion LIKE ? OR sku LIKE ?
         ORDER BY nombre ASC
-    `;
-    
-    const searchTerm = `%${q.trim()}%`; 
-    
-    db.query(sql, [searchTerm, searchTerm, searchTerm], (err, results) => {
-        if (err) {
-            // Esto imprimirá el error real en tu terminal (ej: "Unknown column...")
-            console.error('Error detallado en MySQL:', err.message);
-            return res.status(500).json({ 
-                success: false,
-                error: 'Error al buscar productos',
-                sqlError: err.message 
-            });
-        }
-        
-        res.json({ 
-            success: true,
-            productos: results,
-            total: results.length,
-            termino: q
-        });
-    });
-});
-
-router.get('/api/productos',(req,res)=>{
-
-    const sql = 'SELECT * FROM productos'
-
-    db.query(sql,(err,result)=>{
-        if(err){
-            console.error('Error en colsulta SQL')
-            return res.status(500).json({error: 'Error al Consultar la base de datos'})
-        }
-
-        res.json({
-            success: true,
-            productos: result,
-            total: result.length
-        })
+    `
+    const t = `%${q.trim()}%`
+    db.query(sql, [t, t, t], (err, results) => {
+        if (err) return res.status(500).json({ success: false, error: 'Error al buscar productos', sqlError: err.message })
+        res.json({ success: true, productos: results, total: results.length, termino: q })
     })
-
 })
 
+// GET todos los productos
+router.get('/api/productos', (req, res) => {
+    const sql = 'SELECT * FROM productos'
+    db.query(sql, (err, result) => {
+        if (err) return res.status(500).json({ error: 'Error al consultar la base de datos' })
+        res.json({ success: true, productos: result, total: result.length })
+    })
+})
 
+// GET producto por id
 router.get('/api/productos/:id', (req, res) => {
     const sql = 'SELECT * FROM productos WHERE id = ?'
-    const id = req.params.id
-
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            console.error('Error en la consulta:', err)
-            return res.status(500).json({ error: 'Error en la consulta' })
-        }
-        
-        // 2. Para ver si no hay resultados, checa el largo del array (result.length)
-        if (result.length === 0) {
-            return res.status(404).json({ error: 'producto no encontrado' })
-        }
-
-        // 3. Devuelve el primer (y único) resultado
+    db.query(sql, [req.params.id], (err, result) => {
+        if (err) return res.status(500).json({ error: 'Error en la consulta' })
+        if (result.length === 0) return res.status(404).json({ error: 'Producto no encontrado' })
         res.json(result[0])
     })
 })
 
-
+// POST crear producto (con imagen_url)
 router.post('/api/productos', (req, res) => {
-    // 1. Extraer datos del body (¡ESTO TE FALTA!)
-    const { categoria_id, nombre, descripcion, precio, stock, sku, estado } = req.body;
-
-    // 2. Tu query (está bien)
-    const sql = 'INSERT INTO productos (categoria_id, nombre, descripcion, precio, stock, sku, estado) VALUES (?,?,?,?,?,?,?)';
-
-    
-    db.query(sql, [categoria_id, nombre, descripcion, precio, stock, sku, estado], (err, result) => {
+    const { categoria_id, nombre, descripcion, precio, stock, sku, estado, imagen_url } = req.body
+    const sql = 'INSERT INTO productos (categoria_id, nombre, descripcion, precio, stock, sku, estado, imagen_url) VALUES (?,?,?,?,?,?,?,?)'
+    db.query(sql, [categoria_id, nombre, descripcion, precio, stock, sku, estado || 'disponible', imagen_url || null], (err, result) => {
         if (err) {
-            console.error(' Error detallado:', err);  
-            return res.status(500).json({ error: 'Error en la consulta SQL' });
+            console.error('Error al crear producto:', err)
+            return res.status(500).json({ error: 'Error en la consulta SQL', detail: err.message })
         }
+        res.status(201).json({ success: true, message: 'Producto agregado correctamente', productId: result.insertId })
+    })
+})
 
-        res.status(201).json({
-            success: true,
-            message: 'Producto agregado correctamente',
-            productId: result.insertId
-        });
-    });
-});
+// PUT editar producto (con imagen_url)
+router.put('/api/productos/:id', (req, res) => {
+    const { categoria_id, nombre, descripcion, precio, stock, sku, estado, imagen_url } = req.body
+    const sql = `
+        UPDATE productos 
+        SET categoria_id=?, nombre=?, descripcion=?, precio=?, stock=?, sku=?, estado=?, imagen_url=?
+        WHERE id=?
+    `
+    db.query(sql, [categoria_id, nombre, descripcion, precio, stock, sku, estado, imagen_url || null, req.params.id], (err, result) => {
+        if (err) {
+            console.error('Error al editar producto:', err)
+            return res.status(500).json({ error: 'Error al actualizar', detail: err.message })
+        }
+        if (result.affectedRows === 0) return res.status(404).json({ error: 'Producto no encontrado' })
+        res.json({ success: true, message: 'Producto actualizado correctamente' })
+    })
+})
 
-
-router.delete('/api/productos/:id',(req,res)=>{
-    const id = req.params.id
+// DELETE eliminar producto
+router.delete('/api/productos/:id', (req, res) => {
     const sql = 'DELETE FROM productos WHERE id = ?'
-
-    db.query(sql,[id],(err,result)=>{
-        if(err){
-            return res.status(500).json({error:'Error en consulta SQL'})
-        }
-        if(result === 0){
-            return res.status(404).json({error: 'producto no encontrado'})
-        }
-
-        res.json({message: 'Producto eliminado correctamente'})
+    db.query(sql, [req.params.id], (err, result) => {
+        if (err) return res.status(500).json({ error: 'Error en consulta SQL' })
+        if (result.affectedRows === 0) return res.status(404).json({ error: 'Producto no encontrado' })
+        res.json({ success: true, message: 'Producto eliminado correctamente' })
     })
 })
 
 module.exports = router
-

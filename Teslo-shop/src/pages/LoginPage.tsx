@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { api } from "../api/api";
-import { LoginResponse } from "../types/auth";
+import type { LoginResponse } from "../types/auth";
 
 export const LoginPage = () => {
     const { login } = useAuth();

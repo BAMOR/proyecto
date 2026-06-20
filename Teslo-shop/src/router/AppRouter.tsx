@@ -5,10 +5,9 @@ import { HomePage } from "../pages/HomePage";
 import { CartPage } from "../pages/CartPage";
 import { LoginPage } from "../pages/LoginPage";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { DashboardPage } from "../pages/DashboardPage";
+import { DashboardPage } from "../pages/DashboardPage"; // 👈 ya lo tenías
 
 export const AppRouter = createBrowserRouter([
-    // Rutas de clientes (las que ya tienes)
     {
         path: "/",
         element: <ProtectedRoute />,
@@ -23,10 +22,10 @@ export const AppRouter = createBrowserRouter([
         ]
     },
 
-    // 👑 Ruta del Admin (separada, sin MainLayout de tienda)
+    // 👑 Ruta admin — ya la tenías correcta
     {
         path: "/admin",
-        element: <ProtectedRoute allowedRoles={["admin"]} />, // 🛡️ Solo admins
+        element: <ProtectedRoute allowedRoles={["admin"]} />,
         children: [
             { path: "dashboard", element: <DashboardPage /> }
         ]

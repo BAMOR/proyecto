@@ -12,6 +12,7 @@ const clientesRouter = require('./routes/clientesR')
 const detallePedidoRouter = require('./routes/detallePedidoR')
 const historialRouter = require('./routes/historialR')
 const pedidosRouter = require('./routes/pedidosR')
+const dashboardRouter = require('./routes/dashboardR')
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -29,6 +30,7 @@ app.use(clientesRouter)
 app.use(detallePedidoRouter)
 app.use(historialRouter)
 app.use(pedidosRouter)
+app.use(dashboardRouter)
 
 app.get('/health',(req,res)=>{
 

@@ -5,130 +5,56 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
 // ========================================================
-// 🔐 ENDPOINTS DE AUTENTICACIÓN (LOGIN Y REGISTRO)
+// 🔐 AUTENTICACIÓN
 // ========================================================
 
-// 📝 1. Registro de Usuarios (Encriptando Contraseña)
 router.post('/api/auth/register', async (req, res) => {
     const { nombre, email, password, rol, estado } = req.body
-
-    // Validar datos básicos requeridos
     if (!nombre || !email || !password) {
-        return res.status(400).json({ 
-            success: false, 
-            error: 'Nombre, email y contraseña son obligatorios' 
-        })
+        return res.status(400).json({ success: false, error: 'Nombre, email y contraseña son obligatorios' })
     }
-
     try {
-        // Encriptar la contraseña (genera un hash seguro)
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
-
         const sql = 'INSERT INTO usuarios (nombre, email, password, rol, estado) VALUES (?, ?, ?, ?, ?)'
-        
-        // El rol por defecto será 'cliente' y estado 'activo' si no se envían
-        const userRol = rol || 'cliente'
-        const userEstado = estado || 'activo'
-
-        db.query(sql, [nombre, email, hashedPassword, userRol, userEstado], (err, result) => {
+        db.query(sql, [nombre, email, hashedPassword, rol || 'cliente', estado || 'activo'], (err, result) => {
             if (err) {
-                console.error('Error al registrar usuario:', err.message)
-                // Si el email ya existe lanzará un error de duplicado (código ER_DUP_ENTRY)
-                if (err.code === 'ER_DUP_ENTRY') {
-                    return res.status(400).json({ 
-                        success: false, 
-                        error: 'El correo electrónico ya está registrado' 
-                    })
-                }
-                return res.status(500).json({ 
-                    success: false, 
-                    error: 'Error interno en la base de datos' 
-                })
+                if (err.code === 'ER_DUP_ENTRY') return res.status(400).json({ success: false, error: 'El correo electrónico ya está registrado' })
+                return res.status(500).json({ success: false, error: 'Error interno en la base de datos' })
             }
-
-            res.status(201).json({
-                success: true,
-                message: 'Usuario registrado correctamente',
-                userId: result.insertId
-            })
+            res.status(201).json({ success: true, message: 'Usuario registrado correctamente', userId: result.insertId })
         })
     } catch (error) {
         res.status(500).json({ success: false, error: 'Error al procesar la contraseña' })
     }
 })
 
-// 🔑 2. Inicio de Sesión (Generando Token JWT)
 router.post('/api/auth/login', (req, res) => {
     const { email, password } = req.body
+    if (!email || !password) return res.status(400).json({ success: false, error: 'Email y contraseña requeridos' })
 
-    if (!email || !password) {
-        return res.status(400).json({ 
-            success: false, 
-            error: 'Email y contraseña requeridos' 
-        })
-    }
-
-    // Buscar al usuario por el correo electrónico
-    const sql = 'SELECT * FROM usuarios WHERE email = ?'
-    
-    db.query(sql, [email], async (err, results) => {
-        if (err) {
-            return res.status(500).json({ success: false, error: 'Error en la consulta a la BD' })
-        }
-
-        // Si no se encuentra el usuario
-        if (results.length === 0) {
-            return res.status(401).json({ 
-                success: false, 
-                error: 'Credenciales inválidas (Correo o contraseña incorrectos)' 
-            })
-        }
+    db.query('SELECT * FROM usuarios WHERE email = ?', [email], async (err, results) => {
+        if (err) return res.status(500).json({ success: false, error: 'Error en la consulta a la BD' })
+        if (results.length === 0) return res.status(401).json({ success: false, error: 'Credenciales inválidas (Correo o contraseña incorrectos)' })
 
         const usuario = results[0]
-
-        // Verificar si el usuario está activo (si manejas estados)
-        if (usuario.estado === 'inactivo') {
-            return res.status(403).json({ 
-                success: false, 
-                error: 'Tu usuario se encuentra deshabilitado' 
-            })
-        }
+        if (usuario.estado === 'inactivo') return res.status(403).json({ success: false, error: 'Tu usuario se encuentra deshabilitado' })
 
         try {
-            // Comparar la contraseña ingresada con el Hash guardado en la base de datos
             const isMatch = await bcrypt.compare(password, usuario.password)
-            
-            if (!isMatch) {
-                return res.status(401).json({ 
-                    success: false, 
-                    error: 'Credenciales inválidas (Correo o contraseña incorrectos)' 
-                })
-            }
+            if (!isMatch) return res.status(401).json({ success: false, error: 'Credenciales inválidas (Correo o contraseña incorrectos)' })
 
-            // Crear el Payload del Token con los datos esenciales
-            const payload = {
-                id: usuario.id,
-                nombre: usuario.nombre,
-                rol: usuario.rol
-            }
-
-            // Firmar el Token JWT usando tu palabra secreta del archivo .env (Expira en 8 horas)
-            const token = jwt.sign(payload, process.env.JWT_SECRET || 'ClaveSecretaDeRespaldoPorSiAcaso123!', { expiresIn: '8h' })
-
-            // Enviar respuesta exitosa con el token y datos del usuario (menos el password)
+            const token = jwt.sign(
+                { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol },
+                process.env.JWT_SECRET || 'ClaveSecretaDeRespaldoPorSiAcaso123!',
+                { expiresIn: '8h' }
+            )
             res.json({
                 success: true,
                 message: 'Inicio de sesión exitoso',
                 token,
-                usuario: {
-                    id: usuario.id,
-                    nombre: usuario.nombre,
-                    email: usuario.email,
-                    rol: usuario.rol
-                }
+                usuario: { id: usuario.id, nombre: usuario.nombre, email: usuario.email, rol: usuario.rol }
             })
-
         } catch (error) {
             res.status(500).json({ success: false, error: 'Error al validar las credenciales' })
         }
@@ -136,72 +62,91 @@ router.post('/api/auth/login', (req, res) => {
 })
 
 // ========================================================
-// 👥 ENDPOINTS MANTENIMIENTO (TUS RUTAS ANTERIORES)
+// 👥 CRUD USUARIOS
 // ========================================================
 
+// GET todos
 router.get('/api/usuarios', (req, res) => {
-    const sql = 'SELECT id, nombre, email, rol, estado, created_at FROM usuarios'
+    const sql = 'SELECT id, nombre, email, rol, estado, fecha_creacion FROM usuarios ORDER BY fecha_creacion DESC'
     db.query(sql, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error en la consulta a la BD' })
-        }
-        res.json({
-            usuarios: result,
-            total: result.length
-        })
+        if (err) return res.status(500).json({ error: 'Error en la consulta a la BD' })
+        res.json({ success: true, usuarios: result, total: result.length })
     })
 })
 
+// GET por id
 router.get('/api/usuarios/:id', (req, res) => {
-    const id = req.params.id 
-    const sql = 'SELECT id, nombre, email, rol, estado, created_at FROM usuarios WHERE id = ?'
-
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error en la consulta a la DB' })
-        }
-        if (result.length === 0) {
-            return res.status(404).json({ error: 'Usuario no encontrado' })
-        }
+    db.query('SELECT id, nombre, email, rol, estado, fecha_creacion FROM usuarios WHERE id = ?', [req.params.id], (err, result) => {
+        if (err) return res.status(500).json({ error: 'Error en la consulta a la DB' })
+        if (result.length === 0) return res.status(404).json({ error: 'Usuario no encontrado' })
         res.json(result[0])
     })
 })
 
-// Mantenemos tu post original por compatibilidad, pero encriptando el password
+// POST crear usuario desde el dashboard (admin crea usuarios manualmente)
 router.post('/api/usuarios', async (req, res) => {
     const { nombre, email, password, rol, estado } = req.body
-    
+    if (!nombre || !email || !password) {
+        return res.status(400).json({ success: false, error: 'Nombre, email y contraseña son obligatorios' })
+    }
     try {
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
-        
         const sql = 'INSERT INTO usuarios (nombre, email, password, rol, estado) VALUES (?, ?, ?, ?, ?)'
-        db.query(sql, [nombre, email, hashedPassword, rol, estado], (err, result) => {
+        db.query(sql, [nombre, email, hashedPassword, rol || 'cliente', estado || 'activo'], (err, result) => {
             if (err) {
+                if (err.code === 'ER_DUP_ENTRY') return res.status(400).json({ success: false, error: 'El correo electrónico ya está registrado' })
                 return res.status(500).json({ error: 'Error en la consulta a la DB' })
             }
-            res.status(201).json({
-                success: true,
-                message: 'Usuario agregado correctamente',
-                userId: result.insertId
-            })
+            res.status(201).json({ success: true, message: 'Usuario agregado correctamente', userId: result.insertId })
         })
     } catch (e) {
         res.status(500).json({ error: 'Error al procesar la contraseña' })
     }
 })
 
-router.delete('/api/usuarios/:id', (req, res) => {
-    const id = req.params.id
-    const sql = 'DELETE FROM usuarios WHERE id = ?'
+// PUT editar usuario (sin tocar password si no se envía)
+router.put('/api/usuarios/:id', async (req, res) => {
+    const { nombre, email, password, rol, estado } = req.body
+    if (!nombre || !email) {
+        return res.status(400).json({ success: false, error: 'Nombre y email son obligatorios' })
+    }
+    try {
+        // Si mandan nueva contraseña la encriptamos, si no la dejamos como está
+        if (password && password.trim() !== '') {
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(password, salt)
+            const sql = 'UPDATE usuarios SET nombre=?, email=?, password=?, rol=?, estado=? WHERE id=?'
+            db.query(sql, [nombre, email, hashedPassword, rol || 'cliente', estado || 'activo', req.params.id], (err, result) => {
+                if (err) {
+                    if (err.code === 'ER_DUP_ENTRY') return res.status(400).json({ success: false, error: 'El correo electrónico ya está en uso' })
+                    return res.status(500).json({ error: 'Error al actualizar usuario', detail: err.message })
+                }
+                if (result.affectedRows === 0) return res.status(404).json({ error: 'Usuario no encontrado' })
+                res.json({ success: true, message: 'Usuario actualizado correctamente' })
+            })
+        } else {
+            // Sin cambiar contraseña
+            const sql = 'UPDATE usuarios SET nombre=?, email=?, rol=?, estado=? WHERE id=?'
+            db.query(sql, [nombre, email, rol || 'cliente', estado || 'activo', req.params.id], (err, result) => {
+                if (err) {
+                    if (err.code === 'ER_DUP_ENTRY') return res.status(400).json({ success: false, error: 'El correo electrónico ya está en uso' })
+                    return res.status(500).json({ error: 'Error al actualizar usuario', detail: err.message })
+                }
+                if (result.affectedRows === 0) return res.status(404).json({ error: 'Usuario no encontrado' })
+                res.json({ success: true, message: 'Usuario actualizado correctamente' })
+            })
+        }
+    } catch (e) {
+        res.status(500).json({ error: 'Error al procesar la contraseña' })
+    }
+})
 
-    db.query(sql, [id], (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error en la consulta DB' })
-        }
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Usuario no encontrado' })
-        }
+// DELETE eliminar usuario
+router.delete('/api/usuarios/:id', (req, res) => {
+    db.query('DELETE FROM usuarios WHERE id = ?', [req.params.id], (err, result) => {
+        if (err) return res.status(500).json({ error: 'Error en la consulta DB' })
+        if (result.affectedRows === 0) return res.status(404).json({ error: 'Usuario no encontrado' })
         res.json({ success: true, message: 'Usuario eliminado correctamente' })
     })
 })

@@ -1,8 +1,9 @@
+// src/router/ProtectedRoute.tsx
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 interface Props {
-    allowedRoles?: string[]; // 👈 opcional, si no se pasa = cualquier usuario autenticado
+    allowedRoles?: string[]; // 👈 prop nueva, opcional
 }
 
 export const ProtectedRoute = ({ allowedRoles }: Props) => {
@@ -16,14 +17,16 @@ export const ProtectedRoute = ({ allowedRoles }: Props) => {
         );
     }
 
+    // 1. Si no está autenticado → al login
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
     }
 
-    // Si hay roles requeridos y el usuario no los tiene → lo manda a su home
-    if (allowedRoles && !allowedRoles.includes(user!.rol)) {
+    // 2. Si hay roles requeridos y el usuario no tiene el rol → lo manda a su home
+    if (allowedRoles && !allowedRoles.includes(user?.rol ?? "")) {
         return <Navigate to="/" replace />;
     }
 
+    // 3. Todo OK → renderiza la ruta
     return <Outlet />;
 };
