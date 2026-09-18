@@ -1,36 +1,60 @@
 // src/router/AppRouter.tsx
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import { MainLayout } from "../Layout/MainLayout";
-import { HomePage } from "../pages/HomePage";
-import { CartPage } from "../pages/CartPage";
 import { LoginPage } from "../pages/LoginPage";
+import { CatalogoPage } from "../pages/CatalogoPage";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { DashboardPage } from "../pages/DashboardPage"; // 👈 ya lo tenías
+import { RoleRedirect } from "./RoleRedirect";
+import { AdminLayout } from "../pages/admin/AdminLayout";
+import { DashboardHome } from "../pages/admin/DashboardHome";
+import { UsuariosPage } from "../pages/admin/UsuariosPage";
+import { ProductosPage } from "../pages/admin/ProductosPage";
+import { PedidosPage } from "../pages/admin/PedidosPage";
+import { ClientesPage } from "../pages/admin/ClientesPage";
+import { VentasLayout } from "../pages/ventas/VentasLayout";
+import { NuevaVentaPage } from "../pages/ventas/NuevaVentaPage";
+import { HistorialVentasPage } from "../pages/ventas/HistorialVentasPage";
 
 export const AppRouter = createBrowserRouter([
     {
         path: "/",
         element: <ProtectedRoute />,
-        children: [
-            {
-                element: <MainLayout />,
-                children: [
-                    { index: true, element: <HomePage /> },
-                    { path: "cart", element: <CartPage /> }
-                ]
-            }
-        ]
+        children: [{ index: true, element: <RoleRedirect /> }],
     },
 
-    // 👑 Ruta admin — ya la tenías correcta
+    // Ventas: admin y vendedor
+    {
+        path: "/ventas",
+        element: <ProtectedRoute allowedRoles={["admin", "vendedor"]} />,
+        children: [
+            {
+                element: <VentasLayout />,
+                children: [
+                    { index: true, element: <NuevaVentaPage /> },
+                    { path: "historial", element: <HistorialVentasPage /> },
+                ],
+            },
+        ],
+    },
+
+    // Panel admin
     {
         path: "/admin",
         element: <ProtectedRoute allowedRoles={["admin"]} />,
         children: [
-            { path: "dashboard", element: <DashboardPage /> }
-        ]
+            {
+                element: <AdminLayout />,
+                children: [
+                    { index: true, element: <DashboardHome /> },
+                    { path: "usuarios", element: <UsuariosPage /> },
+                    { path: "clientes", element: <ClientesPage /> },
+                    { path: "productos", element: <ProductosPage /> },
+                    { path: "pedidos", element: <PedidosPage /> },
+                ],
+            },
+        ],
     },
 
     { path: "/login", element: <LoginPage /> },
-    { path: "*", element: <Navigate to="/login" replace /> }
+    { path: "/catalogo", element: <CatalogoPage /> },
+    { path: "*", element: <Navigate to="/login" replace /> },
 ]);

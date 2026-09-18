@@ -4,6 +4,8 @@ const cors = require('cors')
 
 require('dotenv').config()
 
+const { notFound, errorHandler } = require('./middlewares/errorHandler')
+
 const productosRouter = require('./routes/productsR')
 const usuariosRouter = require('./routes/usersR')
 const carritoRouter = require('./routes/carritoR')
@@ -39,12 +41,10 @@ app.get('/health',(req,res)=>{
 })
 
 
-app.use((req,res)=>{
+app.use(notFound)
 
-    res.status(404).json({error: 'ruta no encontrada'})
-
-})
+app.use(errorHandler)
 
 app.listen(PORT,()=>{
-    console.log(`servidor corriendo en https://localhost:${PORT}`)
+    console.log(`servidor corriendo en http://localhost:${PORT}`)
 })

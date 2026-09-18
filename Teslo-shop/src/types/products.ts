@@ -7,7 +7,7 @@ export interface Producto{
     stock: number,
     sku: string,
     imagen_url?: string
-    estado: 'disponible' | 'agotado' | 'descontinuado';
+    estado: 'disponible' | 'agotado' | 'inactivo';
     created_at?: string;
 }
 

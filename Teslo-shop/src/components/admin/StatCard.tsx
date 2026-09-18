@@ -1,27 +1,33 @@
-// Frontend/src/components/admin/StatCard.tsx
+import { motion } from "framer-motion";
+import type { ComponentType, SVGProps } from "react";
+
+type Color = "blue" | "green" | "purple" | "orange";
+
+const COLOR_STYLES: Record<Color, string> = {
+    blue: "from-blue-500/20 to-blue-600/5 border-blue-500/20 text-blue-400",
+    green: "from-green-500/20 to-green-600/5 border-green-500/20 text-green-400",
+    purple: "from-purple-500/20 to-purple-600/5 border-purple-500/20 text-purple-400",
+    orange: "from-orange-500/20 to-orange-600/5 border-orange-500/20 text-orange-400",
+};
 
 interface StatCardProps {
-  title: string;
-  value: string | number;
-  icon: string;
-  color: string; // clases de tailwind ej: "blue", "green"
+    label: string;
+    value: string | number;
+    icon: ComponentType<SVGProps<SVGSVGElement>>;
+    color?: Color;
+    index?: number;
 }
 
-export default function StatCard({ title, value, icon, color }: StatCardProps) {
-  const colors: Record<string, string> = {
-    blue: "from-blue-500/20 to-blue-600/10 border-blue-500/20 text-blue-400",
-    green: "from-green-500/20 to-green-600/10 border-green-500/20 text-green-400",
-    purple: "from-purple-500/20 to-purple-600/10 border-purple-500/20 text-purple-400",
-    orange: "from-orange-500/20 to-orange-600/10 border-orange-500/20 text-orange-400",
-  };
-
-  return (
-    <div className={`bg-gradient-to-br ${colors[color]} border rounded-2xl p-6 flex items-center gap-4`}>
-      <div className="text-4xl">{icon}</div>
-      <div>
-        <p className="text-gray-400 text-sm">{title}</p>
-        <p className="text-white text-3xl font-black">{value}</p>
-      </div>
-    </div>
-  );
-}
+export const StatCard = ({ label, value, icon: Icon, color = "blue", index = 0 }: StatCardProps) => (
+    <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25, delay: index * 0.05 }}
+        whileHover={{ y: -3 }}
+        className={`bg-gradient-to-br ${COLOR_STYLES[color]} border rounded-2xl p-5 flex flex-col gap-2`}
+    >
+        <Icon className="h-7 w-7" />
+        <p className="text-gray-400 text-xs font-medium uppercase tracking-wider">{label}</p>
+        <p className="text-white text-2xl font-black">{value}</p>
+    </motion.div>
+);

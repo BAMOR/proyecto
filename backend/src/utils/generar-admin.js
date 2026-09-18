@@ -1,5 +1,4 @@
-const bcrypt = require('bcrypt');
-// Si usas otro paquete como bcryptjs cambia el require anterior
+const bcrypt = require('bcryptjs');
 
 const passwordPlana = 'TuContrasenaSegura123'; // La contraseña que usarás para loguearte
 const saltRounds = 10;
