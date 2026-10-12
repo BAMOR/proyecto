@@ -10,12 +10,17 @@ if (missing.length > 0) {
     process.exit(1)
 }
 
+// DB_SSL_CA es opcional: en desarrollo local (XAMPP) no se usa.
+// En producción (Aiven exige SSL) se pasa el contenido del certificado CA.
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    database: process.env.DB_NAME,
+    ssl: process.env.DB_SSL_CA
+        ? { ca: process.env.DB_SSL_CA.replace(/\\n/g, '\n') }
+        : undefined
 })
 
 pool.getConnection()
