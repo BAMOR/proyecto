@@ -3,7 +3,6 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { LoginPage } from "../pages/LoginPage";
 import { CatalogoPage } from "../pages/CatalogoPage";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { RoleRedirect } from "./RoleRedirect";
 import { AdminLayout } from "../pages/admin/AdminLayout";
 import { DashboardHome } from "../pages/admin/DashboardHome";
 import { UsuariosPage } from "../pages/admin/UsuariosPage";
@@ -15,11 +14,8 @@ import { NuevaVentaPage } from "../pages/ventas/NuevaVentaPage";
 import { HistorialVentasPage } from "../pages/ventas/HistorialVentasPage";
 
 export const AppRouter = createBrowserRouter([
-    {
-        path: "/",
-        element: <ProtectedRoute />,
-        children: [{ index: true, element: <RoleRedirect /> }],
-    },
+    // Catálogo público: pantalla de inicio, no requiere sesión
+    { path: "/", element: <CatalogoPage /> },
 
     // Ventas: admin y vendedor
     {
@@ -55,6 +51,5 @@ export const AppRouter = createBrowserRouter([
     },
 
     { path: "/login", element: <LoginPage /> },
-    { path: "/catalogo", element: <CatalogoPage /> },
-    { path: "*", element: <Navigate to="/login" replace /> },
+    { path: "*", element: <Navigate to="/" replace /> },
 ]);

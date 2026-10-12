@@ -4,10 +4,10 @@ import type { ComponentType, SVGProps } from "react";
 type Color = "blue" | "green" | "purple" | "orange";
 
 const COLOR_STYLES: Record<Color, string> = {
-    blue: "from-blue-500/20 to-blue-600/5 border-blue-500/20 text-blue-400",
-    green: "from-green-500/20 to-green-600/5 border-green-500/20 text-green-400",
-    purple: "from-purple-500/20 to-purple-600/5 border-purple-500/20 text-purple-400",
-    orange: "from-orange-500/20 to-orange-600/5 border-orange-500/20 text-orange-400",
+    blue: "from-blue-500/10 to-blue-600/5 border-blue-300 dark:border-blue-500/20 text-blue-600 dark:text-blue-400",
+    green: "from-green-500/10 to-green-600/5 border-green-300 dark:border-green-500/20 text-green-600 dark:text-green-400",
+    purple: "from-purple-500/10 to-purple-600/5 border-purple-300 dark:border-purple-500/20 text-purple-600 dark:text-purple-400",
+    orange: "from-orange-500/10 to-orange-600/5 border-orange-500/20 text-orange-600 dark:text-orange-400",
 };
 
 interface StatCardProps {
@@ -27,7 +27,7 @@ export const StatCard = ({ label, value, icon: Icon, color = "blue", index = 0 }
         className={`bg-gradient-to-br ${COLOR_STYLES[color]} border rounded-2xl p-5 flex flex-col gap-2`}
     >
         <Icon className="h-7 w-7" />
-        <p className="text-gray-400 text-xs font-medium uppercase tracking-wider">{label}</p>
-        <p className="text-white text-2xl font-black">{value}</p>
+        <p className="text-slate-500 dark:text-gray-400 text-xs font-medium uppercase tracking-wider">{label}</p>
+        <p className="text-slate-900 dark:text-white text-2xl font-black">{value}</p>
     </motion.div>
 );

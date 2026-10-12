@@ -43,11 +43,11 @@ export const ProductosPage = () => {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-black">Productos</h1>
-                    <p className="text-gray-400 text-sm mt-1">Catálogo completo</p>
+                    <p className="text-slate-500 dark:text-gray-400 text-sm mt-1">Catálogo completo</p>
                 </div>
                 <div className="flex items-center gap-3">
                     {!isLoading && (
-                        <div className="bg-green-600/10 border border-green-500/20 px-4 py-2 rounded-xl text-sm text-green-300 font-semibold">
+                        <div className="bg-green-100 dark:bg-green-600/10 border border-green-300 dark:border-green-500/20 px-4 py-2 rounded-xl text-sm text-green-700 dark:text-green-300 font-semibold">
                             {productos.length} productos
                         </div>
                     )}

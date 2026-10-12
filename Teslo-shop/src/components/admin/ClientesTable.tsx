@@ -9,10 +9,10 @@ interface Props {
 }
 
 export const ClientesTable = ({ clientes, onEliminar }: Props) => (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+    <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl overflow-hidden">
         <table className="w-full text-sm">
             <thead>
-                <tr className="text-left text-gray-500 text-xs uppercase tracking-wider border-b border-gray-800">
+                <tr className="text-left text-slate-400 dark:text-gray-500 text-xs uppercase tracking-wider border-b border-slate-200 dark:border-gray-800">
                     <th className="px-6 py-4">Nombre</th>
                     <th className="px-6 py-4">Email</th>
                     <th className="px-6 py-4">Teléfono</th>
@@ -21,18 +21,18 @@ export const ClientesTable = ({ clientes, onEliminar }: Props) => (
                     <th className="px-6 py-4 text-right">Acciones</th>
                 </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/40">
+            <tbody className="divide-y divide-slate-200 dark:divide-gray-800/40">
                 {clientes.map((c) => (
-                    <tr key={c.id} className="text-gray-300 hover:bg-gray-800/30 transition-colors">
+                    <tr key={c.id} className="text-slate-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-800/30 transition-colors">
                         <td className="px-6 py-4 font-semibold">{c.nombre}</td>
-                        <td className="px-6 py-4 text-gray-400">{c.email}</td>
-                        <td className="px-6 py-4 text-gray-400">{c.telefono || "—"}</td>
-                        <td className="px-6 py-4 text-gray-400">{c.ciudad || "—"}</td>
-                        <td className="px-6 py-4 text-gray-500">{fmt(c.fecha_registro)}</td>
+                        <td className="px-6 py-4 text-slate-500 dark:text-gray-400">{c.email}</td>
+                        <td className="px-6 py-4 text-slate-500 dark:text-gray-400">{c.telefono || "—"}</td>
+                        <td className="px-6 py-4 text-slate-500 dark:text-gray-400">{c.ciudad || "—"}</td>
+                        <td className="px-6 py-4 text-slate-400 dark:text-gray-500">{fmt(c.fecha_registro)}</td>
                         <td className="px-6 py-4 text-right">
                             <button
                                 onClick={() => onEliminar(c)}
-                                className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5"
+                                className="bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:hover:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-300 dark:border-red-500/20 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all inline-flex items-center gap-1.5"
                             >
                                 <TrashIcon className="h-4 w-4" /> Eliminar
                             </button>
@@ -41,6 +41,6 @@ export const ClientesTable = ({ clientes, onEliminar }: Props) => (
                 ))}
             </tbody>
         </table>
-        {clientes.length === 0 && <p className="text-center text-gray-600 py-10">No hay clientes.</p>}
+        {clientes.length === 0 && <p className="text-center text-slate-300 dark:text-gray-600 py-10">No hay clientes.</p>}
     </div>
 );

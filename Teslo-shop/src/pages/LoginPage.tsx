@@ -112,8 +112,8 @@ export const LoginPage = () => {
                 </div>
 
                 <p className="mt-6 text-center text-sm">
-                    <Link to="/catalogo" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
-                        Ver catálogo de productos
+                    <Link to="/" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+                        &larr; Volver al catálogo de productos
                     </Link>
                 </p>
             </motion.div>

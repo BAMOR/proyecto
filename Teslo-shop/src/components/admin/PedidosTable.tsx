@@ -11,10 +11,10 @@ interface Props {
 }
 
 export const PedidosTable = ({ pedidos, onAnular }: Props) => (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
+    <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl overflow-hidden">
         <table className="w-full text-sm">
             <thead>
-                <tr className="text-left text-gray-500 text-xs uppercase tracking-wider border-b border-gray-800">
+                <tr className="text-left text-slate-400 dark:text-gray-500 text-xs uppercase tracking-wider border-b border-slate-200 dark:border-gray-800">
                     <th className="px-6 py-4">#Pedido</th>
                     <th className="px-6 py-4">Cliente</th>
                     <th className="px-6 py-4">Total</th>
@@ -25,22 +25,22 @@ export const PedidosTable = ({ pedidos, onAnular }: Props) => (
                     {onAnular && <th className="px-6 py-4 text-right">Acciones</th>}
                 </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/40">
+            <tbody className="divide-y divide-slate-200 dark:divide-gray-800/40">
                 {pedidos.map((p) => (
-                    <tr key={p.id} className="text-gray-300 hover:bg-gray-800/30 transition-colors">
-                        <td className="px-6 py-4 text-gray-500 font-mono text-xs">{p.numero_pedido ?? `#${p.id}`}</td>
+                    <tr key={p.id} className="text-slate-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-800/30 transition-colors">
+                        <td className="px-6 py-4 text-slate-400 dark:text-gray-500 font-mono text-xs">{p.numero_pedido ?? `#${p.id}`}</td>
                         <td className="px-6 py-4 font-semibold">{p.cliente}</td>
-                        <td className="px-6 py-4 text-green-400 font-bold">{fmtQ(p.total)}</td>
-                        <td className="px-6 py-4 text-gray-400 capitalize">{p.metodo_pago ?? "—"}</td>
+                        <td className="px-6 py-4 text-green-700 dark:text-green-400 font-bold">{fmtQ(p.total)}</td>
+                        <td className="px-6 py-4 text-slate-500 dark:text-gray-400 capitalize">{p.metodo_pago ?? "—"}</td>
                         <td className="px-6 py-4"><Badge texto={p.estado} /></td>
                         <td className="px-6 py-4"><Badge texto={p.estado_pago} /></td>
-                        <td className="px-6 py-4 text-gray-500">{fmt(p.fecha_pedido)}</td>
+                        <td className="px-6 py-4 text-slate-400 dark:text-gray-500">{fmt(p.fecha_pedido)}</td>
                         {onAnular && (
                             <td className="px-6 py-4 text-right">
                                 <button
                                     onClick={() => onAnular(p)}
                                     disabled={p.estado === "cancelado"}
-                                    className="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed inline-flex items-center gap-1.5"
+                                    className="bg-red-100 dark:bg-red-500/10 hover:bg-red-200 dark:hover:bg-red-500/20 text-red-700 dark:text-red-400 border border-red-300 dark:border-red-500/20 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed inline-flex items-center gap-1.5"
                                 >
                                     <NoSymbolIcon className="h-4 w-4" /> Anular
                                 </button>
@@ -50,6 +50,6 @@ export const PedidosTable = ({ pedidos, onAnular }: Props) => (
                 ))}
             </tbody>
         </table>
-        {pedidos.length === 0 && <p className="text-center text-gray-600 py-10">No hay pedidos.</p>}
+        {pedidos.length === 0 && <p className="text-center text-slate-300 dark:text-gray-600 py-10">No hay pedidos.</p>}
     </div>
 );

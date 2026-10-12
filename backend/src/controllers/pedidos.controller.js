@@ -83,6 +83,12 @@ async function crear(req, res) {
             await connection.query('UPDATE productos SET stock = stock - ? WHERE id = ?', [linea.cantidad, linea.producto_id])
         }
 
+        await connection.query(
+            `INSERT INTO historial_estados (pedido_id, estado_anterior, estado_nuevo, usuario_id, notas)
+             VALUES (?, NULL, 'confirmado', ?, 'Venta registrada')`,
+            [pedidoId, req.usuario.id]
+        )
+
         await connection.commit()
 
         res.status(201).json({ success: true, message: 'Venta registrada', pedidoId, numero_pedido, subtotal, impuesto, total })
@@ -111,6 +117,13 @@ async function anular(req, res) {
         }
 
         await connection.query("UPDATE pedidos SET estado = 'cancelado' WHERE id = ?", [req.params.id])
+
+        await connection.query(
+            `INSERT INTO historial_estados (pedido_id, estado_anterior, estado_nuevo, usuario_id, notas)
+             VALUES (?, ?, 'cancelado', ?, 'Venta anulada, stock restaurado')`,
+            [req.params.id, pedidos[0].estado, req.usuario.id]
+        )
+
         await connection.commit()
 
         res.json({ success: true, message: 'Pedido anulado correctamente' })

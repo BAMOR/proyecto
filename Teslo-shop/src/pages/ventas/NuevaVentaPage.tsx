@@ -59,25 +59,25 @@ export const NuevaVentaPage = () => {
     return (
         <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
             <div>
-                <h1 className="text-3xl font-black text-white">Nueva venta</h1>
-                <p className="text-gray-400 text-sm mt-1">Registra una venta para un cliente de ICE S.A.</p>
+                <h1 className="text-3xl font-black text-slate-900 dark:text-white">Nueva venta</h1>
+                <p className="text-slate-500 dark:text-gray-400 text-sm mt-1">Registra una venta para un cliente de ICE S.A.</p>
             </div>
 
             <div className="grid lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
-                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-                        <h2 className="text-sm font-bold text-gray-300 uppercase tracking-wider mb-3">1. Cliente</h2>
+                    <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-5">
+                        <h2 className="text-sm font-bold text-slate-700 dark:text-gray-300 uppercase tracking-wider mb-3">1. Cliente</h2>
                         <ClientePicker value={cliente} onChange={setCliente} />
                     </div>
 
-                    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-                        <h2 className="text-sm font-bold text-gray-300 uppercase tracking-wider mb-3">2. Productos</h2>
+                    <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-5">
+                        <h2 className="text-sm font-bold text-slate-700 dark:text-gray-300 uppercase tracking-wider mb-3">2. Productos</h2>
                         <ProductoPicker onAgregar={(producto) => dispatch({ type: "add-item", payload: { producto } })} />
                     </div>
                 </div>
 
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 h-fit lg:sticky lg:top-8 space-y-4">
-                    <h2 className="text-sm font-bold text-gray-300 uppercase tracking-wider">Resumen de venta</h2>
+                <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-5 h-fit lg:sticky lg:top-8 space-y-4">
+                    <h2 className="text-sm font-bold text-slate-700 dark:text-gray-300 uppercase tracking-wider">Resumen de venta</h2>
 
                     <div className="space-y-2 max-h-72 overflow-y-auto">
                         <AnimatePresence initial={false}>
@@ -92,7 +92,7 @@ export const NuevaVentaPage = () => {
                             ))}
                         </AnimatePresence>
                         {draft.items.length === 0 && (
-                            <div className="text-center py-8 text-gray-600">
+                            <div className="text-center py-8 text-slate-300 dark:text-gray-600">
                                 <ShoppingBagIcon className="h-8 w-8 mx-auto mb-2" />
                                 <p className="text-sm">Sin productos agregados</p>
                             </div>
@@ -100,13 +100,13 @@ export const NuevaVentaPage = () => {
                     </div>
 
                     <div>
-                        <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">
+                        <label className="block text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider mb-1">
                             Método de pago
                         </label>
                         <select
                             value={metodoPago}
                             onChange={(e) => setMetodoPago(e.target.value)}
-                            className="w-full bg-gray-800/60 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-blue-500 transition-colors"
+                            className="w-full bg-slate-100 dark:bg-gray-800/60 border border-slate-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-blue-500 transition-colors"
                         >
                             {METODOS_PAGO.map((m) => (
                                 <option key={m.value} value={m.value}>{m.label}</option>
@@ -114,16 +114,16 @@ export const NuevaVentaPage = () => {
                         </select>
                     </div>
 
-                    <div className="border-t border-gray-800 pt-3 space-y-1.5">
-                        <div className="flex justify-between text-sm text-gray-400">
+                    <div className="border-t border-slate-200 dark:border-gray-800 pt-3 space-y-1.5">
+                        <div className="flex justify-between text-sm text-slate-500 dark:text-gray-400">
                             <span>Subtotal</span>
                             <span>Q {subtotal.toFixed(2)}</span>
                         </div>
-                        <div className="flex justify-between text-sm text-gray-400">
+                        <div className="flex justify-between text-sm text-slate-500 dark:text-gray-400">
                             <span>IVA (12%)</span>
                             <span>Q {impuesto.toFixed(2)}</span>
                         </div>
-                        <div className="flex justify-between text-lg font-black text-white pt-1">
+                        <div className="flex justify-between text-lg font-black text-slate-900 dark:text-white pt-1">
                             <span>Total</span>
                             <span>Q {total.toFixed(2)}</span>
                         </div>
@@ -132,7 +132,7 @@ export const NuevaVentaPage = () => {
                     <button
                         onClick={handleRegistrar}
                         disabled={crearVenta.isPending}
-                        className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2"
+                        className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-slate-900 dark:text-white py-3 rounded-xl font-bold transition-all flex items-center justify-center gap-2"
                     >
                         {crearVenta.isPending ? (
                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

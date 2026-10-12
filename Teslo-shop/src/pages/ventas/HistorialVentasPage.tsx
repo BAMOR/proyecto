@@ -8,11 +8,11 @@ export const HistorialVentasPage = () => {
         <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-3xl font-black text-white">Historial de ventas</h1>
-                    <p className="text-gray-400 text-sm mt-1">Todas las ventas registradas en el sistema</p>
+                    <h1 className="text-3xl font-black text-slate-900 dark:text-white">Historial de ventas</h1>
+                    <p className="text-slate-500 dark:text-gray-400 text-sm mt-1">Todas las ventas registradas en el sistema</p>
                 </div>
                 {!isLoading && (
-                    <div className="bg-purple-600/10 border border-purple-500/20 px-4 py-2 rounded-xl text-sm text-purple-300 font-semibold">
+                    <div className="bg-purple-100 dark:bg-purple-600/10 border border-purple-300 dark:border-purple-500/20 px-4 py-2 rounded-xl text-sm text-purple-700 dark:text-purple-300 font-semibold">
                         {pedidos.length} ventas
                     </div>
                 )}

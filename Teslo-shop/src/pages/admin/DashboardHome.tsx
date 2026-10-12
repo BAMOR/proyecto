@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import {
     Bar,
     BarChart,
@@ -26,13 +26,21 @@ import { useDashboardStats } from "../../hooks/admin/useDashboardStats";
 import { usePedidosAdmin } from "../../hooks/admin/usePedidos";
 import { useProductosAdmin } from "../../hooks/admin/useProductos";
 import { StatCard } from "../../components/admin/StatCard";
+import type { Theme } from "../../hooks/useTheme";
 
 const fmtQ = (v: number) => `Q ${Number(v).toLocaleString("es-GT", { minimumFractionDigits: 2 })}`;
 
 const PIE_COLORS = ["#3b82f6", "#a855f7", "#22c55e", "#f97316", "#ef4444", "#eab308"];
 
+const CHART_COLORS = {
+    light: { grid: "#e2e8f0", axis: "#64748b", tooltipBg: "#ffffff", tooltipBorder: "#e2e8f0", tooltipText: "#334155" },
+    dark: { grid: "#1f2937", axis: "#9ca3af", tooltipBg: "#111827", tooltipBorder: "#1f2937", tooltipText: "#e5e7eb" },
+};
+
 export const DashboardHome = () => {
     const { user } = useAuth();
+    const { theme } = useOutletContext<{ theme: Theme }>();
+    const c = CHART_COLORS[theme];
     const { data: stats, isLoading: loadingStats } = useDashboardStats();
     const { data: pedidos } = usePedidosAdmin();
     const { data: productos } = useProductosAdmin();
@@ -60,8 +68,8 @@ export const DashboardHome = () => {
         <>
             <div>
                 <h1 className="text-3xl font-black">Dashboard</h1>
-                <p className="text-gray-400 text-sm mt-1">
-                    Bienvenido, <span className="text-white font-semibold">{user?.nombre}</span>
+                <p className="text-slate-500 dark:text-gray-400 text-sm mt-1">
+                    Bienvenido, <span className="text-slate-900 dark:text-white font-semibold">{user?.nombre}</span>
                 </p>
             </div>
 
@@ -81,10 +89,10 @@ export const DashboardHome = () => {
                     </div>
 
                     <div className="grid lg:grid-cols-2 gap-4">
-                        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-                            <h2 className="text-sm font-bold text-gray-300 uppercase tracking-wider mb-4">Pedidos por estado</h2>
+                        <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-6">
+                            <h2 className="text-sm font-bold text-slate-700 dark:text-gray-300 uppercase tracking-wider mb-4">Pedidos por estado</h2>
                             {pedidosPorEstado.length === 0 ? (
-                                <p className="text-gray-600 text-sm py-10 text-center">Sin datos aún.</p>
+                                <p className="text-slate-300 dark:text-gray-600 text-sm py-10 text-center">Sin datos aún.</p>
                             ) : (
                                 <ResponsiveContainer width="100%" height={260}>
                                     <PieChart>
@@ -101,25 +109,25 @@ export const DashboardHome = () => {
                                             ))}
                                         </Pie>
                                         <Tooltip
-                                            contentStyle={{ background: "#111827", border: "1px solid #1f2937", borderRadius: 12 }}
-                                            labelStyle={{ color: "#e5e7eb", textTransform: "capitalize" }}
+                                            contentStyle={{ background: c.tooltipBg, border: `1px solid ${c.tooltipBorder}`, borderRadius: 12 }}
+                                            labelStyle={{ color: c.tooltipText, textTransform: "capitalize" }}
                                         />
-                                        <Legend wrapperStyle={{ fontSize: 12, textTransform: "capitalize" }} />
+                                        <Legend wrapperStyle={{ fontSize: 12, textTransform: "capitalize", color: c.axis }} />
                                     </PieChart>
                                 </ResponsiveContainer>
                             )}
                         </div>
 
-                        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-                            <h2 className="text-sm font-bold text-gray-300 uppercase tracking-wider mb-4">Inventario</h2>
+                        <div className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 rounded-2xl p-6">
+                            <h2 className="text-sm font-bold text-slate-700 dark:text-gray-300 uppercase tracking-wider mb-4">Inventario</h2>
                             <ResponsiveContainer width="100%" height={260}>
                                 <BarChart data={stockChart}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
-                                    <XAxis dataKey="nombre" tick={{ fill: "#9ca3af", fontSize: 12 }} axisLine={{ stroke: "#1f2937" }} tickLine={false} />
-                                    <YAxis tick={{ fill: "#9ca3af", fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
+                                    <CartesianGrid strokeDasharray="3 3" stroke={c.grid} vertical={false} />
+                                    <XAxis dataKey="nombre" tick={{ fill: c.axis, fontSize: 12 }} axisLine={{ stroke: c.grid }} tickLine={false} />
+                                    <YAxis tick={{ fill: c.axis, fontSize: 12 }} axisLine={false} tickLine={false} allowDecimals={false} />
                                     <Tooltip
-                                        contentStyle={{ background: "#111827", border: "1px solid #1f2937", borderRadius: 12 }}
-                                        labelStyle={{ color: "#e5e7eb" }}
+                                        contentStyle={{ background: c.tooltipBg, border: `1px solid ${c.tooltipBorder}`, borderRadius: 12 }}
+                                        labelStyle={{ color: c.tooltipText }}
                                         cursor={{ fill: "rgba(59,130,246,0.08)" }}
                                     />
                                     <Bar dataKey="cantidad" radius={[8, 8, 0, 0]}>
@@ -133,14 +141,14 @@ export const DashboardHome = () => {
 
                     <div className="grid grid-cols-3 gap-4">
                         {[
-                            { label: "Ver usuarios", to: "/admin/usuarios", icon: UsersIcon, color: "text-blue-400" },
-                            { label: "Ver productos", to: "/admin/productos", icon: ShoppingBagIcon, color: "text-green-400" },
-                            { label: "Ver pedidos", to: "/admin/pedidos", icon: ShoppingCartIcon, color: "text-purple-400" },
+                            { label: "Ver usuarios", to: "/admin/usuarios", icon: UsersIcon, color: "text-blue-600 dark:text-blue-400" },
+                            { label: "Ver productos", to: "/admin/productos", icon: ShoppingBagIcon, color: "text-green-600 dark:text-green-400" },
+                            { label: "Ver pedidos", to: "/admin/pedidos", icon: ShoppingCartIcon, color: "text-purple-600 dark:text-purple-400" },
                         ].map((a) => (
                             <Link
                                 key={a.label}
                                 to={a.to}
-                                className="bg-gray-900 border border-gray-800 hover:border-gray-700 rounded-2xl p-5 flex items-center gap-3 transition-all hover:bg-gray-800/50"
+                                className="bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 hover:border-slate-300 dark:hover:border-gray-700 rounded-2xl p-5 flex items-center gap-3 transition-all hover:bg-slate-100 dark:hover:bg-gray-800/50"
                             >
                                 <a.icon className={`h-6 w-6 ${a.color}`} />
                                 <span className={`font-semibold text-sm ${a.color}`}>{a.label}</span>

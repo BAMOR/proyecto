@@ -28,12 +28,12 @@ export const ProductoPicker = ({ onAgregar }: Props) => {
     return (
         <div className="space-y-3">
             <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-gray-500" />
                 <input
                     value={busqueda}
                     onChange={(e) => setBusqueda(e.target.value)}
                     placeholder="Buscar producto por nombre o SKU..."
-                    className="w-full bg-gray-800/60 border border-gray-700 rounded-xl pl-10 pr-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
+                    className="w-full bg-slate-100 dark:bg-gray-800/60 border border-slate-300 dark:border-gray-700 rounded-xl pl-10 pr-3 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
                 />
             </div>
 
@@ -50,16 +50,16 @@ export const ProductoPicker = ({ onAgregar }: Props) => {
                                 key={p.id}
                                 onClick={() => onAgregar(p)}
                                 disabled={sinStock}
-                                className="text-left bg-gray-800/60 border border-gray-700 hover:border-blue-500/60 rounded-xl p-3 transition-all disabled:opacity-40 disabled:cursor-not-allowed group"
+                                className="text-left bg-slate-100 dark:bg-gray-800/60 border border-slate-300 dark:border-gray-700 hover:border-blue-500/60 rounded-xl p-3 transition-all disabled:opacity-40 disabled:cursor-not-allowed group"
                             >
                                 <div className="flex items-start justify-between gap-2">
-                                    <span className="text-sm font-semibold text-white line-clamp-2">{p.nombre}</span>
-                                    <PlusCircleIcon className="h-5 w-5 text-blue-400 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <span className="text-sm font-semibold text-slate-900 dark:text-white line-clamp-2">{p.nombre}</span>
+                                    <PlusCircleIcon className="h-5 w-5 text-blue-700 dark:text-blue-400 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
-                                <p className="text-xs text-gray-500 font-mono mt-1">{p.sku}</p>
+                                <p className="text-xs text-slate-400 dark:text-gray-500 font-mono mt-1">{p.sku}</p>
                                 <div className="flex items-center justify-between mt-2">
-                                    <span className="text-green-400 font-bold text-sm">Q {Number(p.precio).toFixed(2)}</span>
-                                    <span className={`text-xs font-semibold ${sinStock ? "text-red-400" : p.stock <= 5 ? "text-yellow-400" : "text-gray-500"}`}>
+                                    <span className="text-green-700 dark:text-green-400 font-bold text-sm">Q {Number(p.precio).toFixed(2)}</span>
+                                    <span className={`text-xs font-semibold ${sinStock ? "text-red-700 dark:text-red-400" : p.stock <= 5 ? "text-yellow-700 dark:text-yellow-400" : "text-slate-400 dark:text-gray-500"}`}>
                                         {sinStock ? "Sin stock" : `Stock: ${p.stock}`}
                                     </span>
                                 </div>
@@ -67,7 +67,7 @@ export const ProductoPicker = ({ onAgregar }: Props) => {
                         );
                     })}
                     {productos.length === 0 && (
-                        <p className="col-span-full text-center text-gray-600 py-10">No se encontraron productos.</p>
+                        <p className="col-span-full text-center text-slate-300 dark:text-gray-600 py-10">No se encontraron productos.</p>
                     )}
                 </div>
             )}

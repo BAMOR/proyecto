@@ -32,11 +32,11 @@ export const ClientesPage = () => {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-black">Clientes</h1>
-                    <p className="text-gray-400 text-sm mt-1">Base de clientes de ICE S.A.</p>
+                    <p className="text-slate-500 dark:text-gray-400 text-sm mt-1">Base de clientes de ICE S.A.</p>
                 </div>
                 <div className="flex items-center gap-3">
                     {!isLoading && (
-                        <div className="bg-blue-600/10 border border-blue-500/20 px-4 py-2 rounded-xl text-sm text-blue-300 font-semibold">
+                        <div className="bg-blue-100 dark:bg-blue-600/10 border border-blue-300 dark:border-blue-500/20 px-4 py-2 rounded-xl text-sm text-blue-700 dark:text-blue-300 font-semibold">
                             {clientes.length} registrados
                         </div>
                     )}

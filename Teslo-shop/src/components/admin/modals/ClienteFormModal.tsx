@@ -67,22 +67,22 @@ export const ClienteFormModal = ({ open, onClose, onCreado }: Props) => {
                     onClick={onClose}
                 >
                     <motion.div
-                        className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-md shadow-2xl"
+                        className="bg-white dark:bg-gray-900 border border-slate-300 dark:border-gray-700 rounded-2xl w-full max-w-md shadow-2xl"
                         initial={{ opacity: 0, scale: 0.95, y: 16 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 16 }}
                         transition={{ duration: 0.18 }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-gray-800">
                             <h2 className="text-lg font-black">Nuevo cliente</h2>
-                            <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors">
+                            <button onClick={onClose} className="text-slate-400 dark:text-gray-500 hover:text-slate-900 dark:hover:text-white transition-colors">
                                 <XMarkIcon className="h-5 w-5" />
                             </button>
                         </div>
                         <div className="px-6 py-5 space-y-4 max-h-[70vh] overflow-y-auto">
                             {error && (
-                                <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm px-4 py-3 rounded-xl">
+                                <div className="bg-red-100 dark:bg-red-500/10 border border-red-300 dark:border-red-500/20 text-red-700 dark:text-red-400 text-sm px-4 py-3 rounded-xl">
                                     {error}
                                 </div>
                             )}
@@ -124,8 +124,8 @@ export const ClienteFormModal = ({ open, onClose, onCreado }: Props) => {
                                 />
                             </div>
                         </div>
-                        <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-800">
-                            <button onClick={onClose} className="px-4 py-2 text-sm text-gray-400 hover:text-white font-medium">
+                        <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-gray-800">
+                            <button onClick={onClose} className="px-4 py-2 text-sm text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white font-medium">
                                 Cancelar
                             </button>
                             <button

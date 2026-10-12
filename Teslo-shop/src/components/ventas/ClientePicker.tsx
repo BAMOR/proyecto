@@ -26,32 +26,32 @@ export const ClientePicker = ({ value, onChange }: Props) => {
 
     if (value) {
         return (
-            <div className="bg-gray-800/60 border border-gray-700 rounded-xl p-4 space-y-3">
+            <div className="bg-slate-100 dark:bg-gray-800/60 border border-slate-300 dark:border-gray-700 rounded-xl p-4 space-y-3">
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="bg-blue-500/10 text-blue-400 rounded-full p-2">
+                        <div className="bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 rounded-full p-2">
                             <UserIcon className="h-5 w-5" />
                         </div>
                         <div>
-                            <p className="font-semibold text-white">{value.nombre}</p>
-                            <p className="text-xs text-gray-400">{value.email}</p>
-                            {value.telefono && <p className="text-xs text-gray-500">{value.telefono}</p>}
+                            <p className="font-semibold text-slate-900 dark:text-white">{value.nombre}</p>
+                            <p className="text-xs text-slate-500 dark:text-gray-400">{value.email}</p>
+                            {value.telefono && <p className="text-xs text-slate-400 dark:text-gray-500">{value.telefono}</p>}
                         </div>
                     </div>
-                    <button onClick={() => onChange(null)} className="text-gray-500 hover:text-white transition-colors">
+                    <button onClick={() => onChange(null)} className="text-slate-400 dark:text-gray-500 hover:text-slate-900 dark:hover:text-white transition-colors">
                         <XMarkIcon className="h-5 w-5" />
                     </button>
                 </div>
                 {historial.length > 0 && (
-                    <div className="border-t border-gray-700 pt-3">
-                        <p className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-2">
+                    <div className="border-t border-slate-300 dark:border-gray-700 pt-3">
+                        <p className="text-xs text-slate-400 dark:text-gray-500 uppercase tracking-wider font-semibold mb-2">
                             Compras anteriores ({historial.length})
                         </p>
                         <ul className="space-y-1 max-h-24 overflow-y-auto">
                             {historial.slice(0, 5).map((p) => (
-                                <li key={p.id} className="text-xs text-gray-400 flex justify-between">
+                                <li key={p.id} className="text-xs text-slate-500 dark:text-gray-400 flex justify-between">
                                     <span className="font-mono">{p.numero_pedido}</span>
-                                    <span className="text-green-400 font-semibold">Q {Number(p.total).toFixed(2)}</span>
+                                    <span className="text-green-700 dark:text-green-400 font-semibold">Q {Number(p.total).toFixed(2)}</span>
                                 </li>
                             ))}
                         </ul>
@@ -64,17 +64,17 @@ export const ClientePicker = ({ value, onChange }: Props) => {
     return (
         <div className="space-y-2">
             <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-gray-500" />
                 <input
                     value={busqueda}
                     onChange={(e) => setBusqueda(e.target.value)}
                     placeholder="Buscar cliente por nombre o email..."
-                    className="w-full bg-gray-800/60 border border-gray-700 rounded-xl pl-10 pr-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
+                    className="w-full bg-slate-100 dark:bg-gray-800/60 border border-slate-300 dark:border-gray-700 rounded-xl pl-10 pr-3 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-blue-500 transition-colors"
                 />
             </div>
 
             {resultados.length > 0 && (
-                <div className="bg-gray-800/60 border border-gray-700 rounded-xl overflow-hidden divide-y divide-gray-700/60">
+                <div className="bg-slate-100 dark:bg-gray-800/60 border border-slate-300 dark:border-gray-700 rounded-xl overflow-hidden divide-y divide-slate-200 dark:divide-gray-700/60">
                     {resultados.map((c) => (
                         <button
                             key={c.id}
@@ -82,22 +82,22 @@ export const ClientePicker = ({ value, onChange }: Props) => {
                                 onChange(c);
                                 setBusqueda("");
                             }}
-                            className="w-full text-left px-4 py-2.5 hover:bg-gray-700/50 transition-colors flex flex-col"
+                            className="w-full text-left px-4 py-2.5 hover:bg-slate-100 dark:hover:bg-gray-700/50 transition-colors flex flex-col"
                         >
-                            <span className="text-sm font-semibold text-white">{c.nombre}</span>
-                            <span className="text-xs text-gray-500">{c.email}</span>
+                            <span className="text-sm font-semibold text-slate-900 dark:text-white">{c.nombre}</span>
+                            <span className="text-xs text-slate-400 dark:text-gray-500">{c.email}</span>
                         </button>
                     ))}
                 </div>
             )}
 
             {busqueda.trim().length >= 2 && resultados.length === 0 && (
-                <p className="text-xs text-gray-500">No se encontró ningún cliente con ese nombre o email.</p>
+                <p className="text-xs text-slate-400 dark:text-gray-500">No se encontró ningún cliente con ese nombre o email.</p>
             )}
 
             <button
                 onClick={() => setModalAbierto(true)}
-                className="text-sm font-semibold text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1.5"
+                className="text-sm font-semibold text-blue-700 dark:text-blue-400 hover:text-blue-900 dark:hover:text-blue-300 transition-colors flex items-center gap-1.5"
             >
                 <PlusIcon className="h-4 w-4" /> Registrar cliente nuevo
             </button>

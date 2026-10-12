@@ -30,22 +30,22 @@ export const ConfirmDialog = ({
                 onClick={onCancel}
             >
                 <motion.div
-                    className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-sm shadow-2xl p-6 text-center"
+                    className="bg-white dark:bg-gray-900 border border-slate-300 dark:border-gray-700 rounded-2xl w-full max-w-sm shadow-2xl p-6 text-center"
                     initial={{ opacity: 0, scale: 0.92, y: 12 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.92, y: 12 }}
                     transition={{ duration: 0.18 }}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <div className={`mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full ${danger ? "bg-red-500/10" : "bg-blue-500/10"}`}>
-                        <ExclamationTriangleIcon className={`h-6 w-6 ${danger ? "text-red-400" : "text-blue-400"}`} />
+                    <div className={`mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full ${danger ? "bg-red-100 dark:bg-red-500/10" : "bg-blue-100 dark:bg-blue-500/10"}`}>
+                        <ExclamationTriangleIcon className={`h-6 w-6 ${danger ? "text-red-700 dark:text-red-400" : "text-blue-700 dark:text-blue-400"}`} />
                     </div>
-                    <h2 className="text-lg font-bold text-white mb-2">{title}</h2>
-                    <p className="text-sm text-gray-400 mb-6">{description}</p>
+                    <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{title}</h2>
+                    <p className="text-sm text-slate-500 dark:text-gray-400 mb-6">{description}</p>
                     <div className="flex justify-center gap-3">
                         <button
                             onClick={onCancel}
-                            className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors"
+                            className="px-4 py-2 text-sm font-medium text-slate-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors"
                         >
                             Cancelar
                         </button>

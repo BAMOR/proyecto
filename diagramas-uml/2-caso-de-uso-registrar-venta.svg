@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="780" viewBox="0 0 1240 780" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="open" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="12" markerHeight="12" orient="auto"><path d="M1,1 L11,6 L1,11" fill="none" stroke="#333" stroke-width="1.6"/></marker>
+    <marker id="gen" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M1,1 L13,7 L1,13 Z" fill="#fff" stroke="#222" stroke-width="1.8"/></marker>
+  </defs>
+  <rect width="1240" height="780" fill="#fff"/>
+  
+    <rect x="250" y="40" width="960" height="700" rx="6" fill="#FCFCFD" stroke="#222" stroke-width="2"/>
+    <text x="730" y="70" text-anchor="middle" font-size="18" font-weight="bold" fill="#111">Sistema SIGEV ICE S.A.</text>
+    
+    <circle cx="110" cy="290" r="15" fill="#fff" stroke="#222" stroke-width="2"/>
+    <line x1="110" y1="305" x2="110" y2="345" stroke="#222" stroke-width="2"/>
+    <line x1="86" y1="320" x2="134" y2="320" stroke="#222" stroke-width="2"/>
+    <line x1="110" y1="345" x2="90" y2="378" stroke="#222" stroke-width="2"/>
+    <line x1="110" y1="345" x2="130" y2="378" stroke="#222" stroke-width="2"/>
+    <text x="110" y="402" text-anchor="middle" font-size="16" font-weight="bold" fill="#111">Vendedor</text>
+    
+    <circle cx="110" cy="540" r="15" fill="#fff" stroke="#222" stroke-width="2"/>
+    <line x1="110" y1="555" x2="110" y2="595" stroke="#222" stroke-width="2"/>
+    <line x1="86" y1="570" x2="134" y2="570" stroke="#222" stroke-width="2"/>
+    <line x1="110" y1="595" x2="90" y2="628" stroke="#222" stroke-width="2"/>
+    <line x1="110" y1="595" x2="130" y2="628" stroke="#222" stroke-width="2"/>
+    <text x="110" y="652" text-anchor="middle" font-size="16" font-weight="bold" fill="#111">Administrador</text>
+    <line x1="110" y1="523" x2="110" y2="412" stroke="#222" stroke-width="1.8" marker-end="url(#gen)"/>
+    <line x1="134" y1="325" x2="343.69745389094476" y2="371.0484273747007" stroke="#333" stroke-width="1.6"/>
+    <ellipse cx="430" cy="390" rx="98" ry="40" fill="#D6E6FF" stroke="#0B3D91" stroke-width="2.5"/><text x="430" y="395" text-anchor="middle" font-size="15" fill="#111">Registrar venta</text><ellipse cx="1040" cy="150" rx="121" ry="40" fill="#EAF2FF" stroke="#1A5DAD" stroke-width="1.6"/><text x="1040" y="155" text-anchor="middle" font-size="15" fill="#111">Seleccionar cliente</text><ellipse cx="1040" cy="310" rx="110" ry="54" fill="#EAF2FF" stroke="#1A5DAD" stroke-width="1.6"/><text x="1040" y="306" text-anchor="middle" font-size="15" fill="#111">Agregar productos</text><text x="1040" y="324" text-anchor="middle" font-size="15" fill="#111">a la venta</text><ellipse cx="1040" cy="470" rx="115" ry="54" fill="#EAF2FF" stroke="#1A5DAD" stroke-width="1.6"/><text x="1040" y="466" text-anchor="middle" font-size="15" fill="#111">Calcular subtotal,</text><text x="1040" y="484" text-anchor="middle" font-size="15" fill="#111">IVA y total</text><ellipse cx="1040" cy="630" rx="127" ry="54" fill="#EAF2FF" stroke="#1A5DAD" stroke-width="1.6"/><text x="1040" y="626" text-anchor="middle" font-size="15" fill="#111">Validar stock y</text><text x="1040" y="644" text-anchor="middle" font-size="15" fill="#111">descontar inventario</text><ellipse cx="650" cy="150" rx="110" ry="54" fill="#FFF4DE" stroke="#B0790A" stroke-width="1.6"/><text x="650" y="146" text-anchor="middle" font-size="15" fill="#111">Registrar cliente</text><text x="650" y="164" text-anchor="middle" font-size="15" fill="#111">nuevo</text><ellipse cx="570" cy="630" rx="166" ry="54" fill="#FFF4DE" stroke="#B0790A" stroke-width="1.6"/><text x="570" y="626" text-anchor="middle" font-size="15" fill="#111">Informar stock insuficiente</text><text x="570" y="644" text-anchor="middle" font-size="15" fill="#111">y revertir la venta</text>
+    <line x1="500.55712452867635" y1="362.23981985756996" x2="962.1617878709066" y2="180.62487034587286" stroke="#333" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#open)"/><text x="731.3594561997915" y="275.4323451017214" text-anchor="middle" font-size="13" font-style="italic" fill="#222" stroke="#fff" stroke-width="5" paint-order="stroke" stroke-linejoin="round">«include»</text>
+    <line x1="523.3019813396852" y1="377.76367457840195" x2="933.7270190592142" y2="323.93744012338175" stroke="#333" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#open)"/><text x="728.5145001994497" y="354.85055735089185" text-anchor="middle" font-size="13" font-style="italic" fill="#222" stroke="#fff" stroke-width="5" paint-order="stroke" stroke-linejoin="round">«include»</text>
+    <line x1="523.3019813396852" y1="402.23632542159805" x2="929.2389064749302" y2="455.47395494753187" stroke="#333" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#open)"/><text x="726.2704439073077" y="432.85514018456496" text-anchor="middle" font-size="13" font-style="italic" fill="#222" stroke="#fff" stroke-width="5" paint-order="stroke" stroke-linejoin="round">«include»</text>
+    <line x1="500.55712452867635" y1="417.76018014243004" x2="946.7841843131012" y2="593.3249249756464" stroke="#333" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#open)"/><text x="723.6706544208887" y="509.5425525590382" text-anchor="middle" font-size="13" font-style="italic" fill="#222" stroke="#fff" stroke-width="5" paint-order="stroke" stroke-linejoin="round">«include»</text>
+    <line x1="760" y1="150" x2="919" y2="150" stroke="#333" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#open)"/><text x="839.5" y="148" text-anchor="middle" font-size="13" font-style="italic" fill="#222" stroke="#fff" stroke-width="5" paint-order="stroke" stroke-linejoin="round">«extend»</text><text x="839.5" y="164" text-anchor="middle" font-size="11.5" font-style="italic" fill="#555" stroke="#fff" stroke-width="5" paint-order="stroke" stroke-linejoin="round">[cliente no existe]</text>
+    <line x1="736" y1="630" x2="913" y2="630" stroke="#333" stroke-width="1.5" stroke-dasharray="7 5" marker-end="url(#open)"/><text x="824.5" y="628" text-anchor="middle" font-size="13" font-style="italic" fill="#222" stroke="#fff" stroke-width="5" paint-order="stroke" stroke-linejoin="round">«extend»</text><text x="824.5" y="644" text-anchor="middle" font-size="11.5" font-style="italic" fill="#555" stroke="#fff" stroke-width="5" paint-order="stroke" stroke-linejoin="round">[stock &lt; cantidad]</text>
+    <text x="20" y="700" font-size="12.5" font-style="italic" fill="#555">El Administrador hereda todos los</text><text x="20" y="717" font-size="12.5" font-style="italic" fill="#555">casos de uso del Vendedor.</text>
+</svg>
