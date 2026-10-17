@@ -28,10 +28,16 @@ async function obtenerPorId(req, res) {
     res.json(result[0])
 }
 
+function validarPrecioYStock(precio, stock) {
+    if (Number(precio) <= 0) throw new AppError(400, 'El precio debe ser mayor a 0')
+    if (stock !== undefined && stock !== null && Number(stock) < 0) throw new AppError(400, 'El stock no puede ser negativo')
+}
+
 async function crear(req, res) {
     const { categoria_id, nombre, descripcion, precio, stock, sku, estado, imagen_url } = req.body
     const faltantes = camposFaltantes(req.body, ['nombre', 'precio'])
     if (faltantes.length > 0) throw new AppError(400, 'Nombre y precio son obligatorios')
+    validarPrecioYStock(precio, stock)
 
     const sql = 'INSERT INTO productos (categoria_id, nombre, descripcion, precio, stock, sku, estado, imagen_url) VALUES (?,?,?,?,?,?,?,?)'
     const [result] = await db.query(sql, [categoria_id, nombre, descripcion, precio, stock, sku, estado || 'disponible', imagen_url || null])
@@ -43,6 +49,7 @@ async function actualizar(req, res) {
     const { categoria_id, nombre, descripcion, precio, stock, sku, estado, imagen_url } = req.body
     const faltantes = camposFaltantes(req.body, ['nombre', 'precio'])
     if (faltantes.length > 0) throw new AppError(400, 'Nombre y precio son obligatorios')
+    validarPrecioYStock(precio, stock)
 
     const sql = `
         UPDATE productos

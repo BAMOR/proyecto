@@ -10,6 +10,14 @@ function errorHandler(err, req, res, next) {
         return res.status(400).json({ success: false, error: 'El registro ya existe' })
     }
 
+    if (err.code === 'ER_ROW_IS_REFERENCED_2' || err.code === 'ER_ROW_IS_REFERENCED') {
+        return res.status(400).json({ success: false, error: 'No se puede eliminar: hay otros registros que dependen de este' })
+    }
+
+    if (err.code === 'ER_NO_REFERENCED_ROW_2' || err.code === 'ER_NO_REFERENCED_ROW') {
+        return res.status(400).json({ success: false, error: 'Referencia inválida: el registro relacionado no existe' })
+    }
+
     const status = err.status || 500
     const message = err.status ? err.message : 'Error interno del servidor'
 
