@@ -47,12 +47,15 @@ async function crear(req, res) {
             }
 
             const [rows] = await connection.query(
-                'SELECT id, nombre, precio, stock FROM productos WHERE id = ? FOR UPDATE',
+                'SELECT id, nombre, precio, stock, estado FROM productos WHERE id = ? FOR UPDATE',
                 [producto_id]
             )
             if (rows.length === 0) throw new AppError(404, `Producto ${producto_id} no encontrado`)
 
             const producto = rows[0]
+            if (producto.estado !== 'disponible') {
+                throw new AppError(400, `"${producto.nombre}" no está disponible para la venta`)
+            }
             if (producto.stock < cantidad) {
                 throw new AppError(400, `Stock insuficiente para "${producto.nombre}" (disponible: ${producto.stock})`)
             }

@@ -1,8 +1,7 @@
 // src/context/AuthProvider.tsx
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { ReactNode } from "react";
 import type { Usuario, LoginResponse } from "../types/auth";
-import { api } from "../api/api";
 import { AuthContext } from "./AuthContext";
 
 const leerSesionGuardada = (): { user: Usuario | null; token: string | null } => {
@@ -18,14 +17,8 @@ const leerSesionGuardada = (): { user: Usuario | null; token: string | null } =>
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [{ user, token }, setSesion] = useState(leerSesionGuardada);
 
-    // Sincroniza el header de axios con el token actual (efecto legítimo: sistema externo)
-    useEffect(() => {
-        if (token) {
-            api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        } else {
-            delete api.defaults.headers.common["Authorization"];
-        }
-    }, [token]);
+    // El token para cada petición lo lee un interceptor de axios directo de
+    // localStorage (ver api/api.ts), así que no hace falta sincronizarlo aquí.
 
     const login = (authData: LoginResponse) => {
         localStorage.setItem("token", authData.token);

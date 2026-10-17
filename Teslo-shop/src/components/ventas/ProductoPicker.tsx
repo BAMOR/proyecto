@@ -17,10 +17,10 @@ export const ProductoPicker = ({ onAgregar }: Props) => {
     const [busqueda, setBusqueda] = useState("");
 
     const productos = useMemo(() => {
-        const lista = data?.productos ?? [];
+        const disponibles = (data?.productos ?? []).filter((p) => p.estado === "disponible");
         const termino = busqueda.trim().toLowerCase();
-        if (!termino) return lista;
-        return lista.filter(
+        if (!termino) return disponibles;
+        return disponibles.filter(
             (p) => p.nombre.toLowerCase().includes(termino) || p.sku?.toLowerCase().includes(termino)
         );
     }, [data, busqueda]);
