@@ -55,9 +55,20 @@ async function actualizar(req, res) {
 }
 
 async function eliminar(req, res) {
-    const [result] = await db.query('DELETE FROM productos WHERE id = ?', [req.params.id])
-    if (result.affectedRows === 0) throw new AppError(404, 'Producto no encontrado')
-    res.json({ success: true, message: 'Producto eliminado correctamente' })
+    try {
+        const [result] = await db.query('DELETE FROM productos WHERE id = ?', [req.params.id])
+        if (result.affectedRows === 0) throw new AppError(404, 'Producto no encontrado')
+        res.json({ success: true, message: 'Producto eliminado correctamente' })
+    } catch (error) {
+        // El producto ya tiene ventas asociadas (detalle_pedido lo referencia),
+        // así que no se puede borrar sin romper el historial. Se desactiva en su lugar.
+        if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+            const [result] = await db.query("UPDATE productos SET estado = 'inactivo' WHERE id = ?", [req.params.id])
+            if (result.affectedRows === 0) throw new AppError(404, 'Producto no encontrado')
+            return res.json({ success: true, message: 'El producto tiene ventas registradas, así que se marcó como inactivo en lugar de eliminarse' })
+        }
+        throw error
+    }
 }
 
 module.exports = { buscar, listar, obtenerPorId, crear, actualizar, eliminar }
